@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Game - Drive Around</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="loading">Loading...</div>
+
+    <div id="ui">
+      <h2>🚗 Car Game</h2>
+      <p>Drive around and explore!</p>
+      <p>Score: <span id="score">0</span></p>
+    </div>
+
+    <div id="controls">
+      <strong>Controls:</strong><br />
+      WASD or Arrow Keys - Drive<br />
+      Space - Brake<br />
+      R - Reset Position<br />
+      C - Change Camera
+    </div>
+
+    <div id="speedometer">
+      <div>Speed</div>
+      <div class="speed-value" id="speed">0</div>
+      <div>km/h</div>
+    </div>
+
+    <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
+    <script>
+      // Check if Three.js loaded successfully
+      window.addEventListener("load", () => {
+        if (typeof THREE === "undefined") {
+          document.getElementById("loading").innerHTML =
+            "Error: Three.js failed to load";
+          console.error("Three.js failed to load");
+        } else {
+          console.log("✅ Three.js loaded successfully!");
+          document.getElementById("loading").innerHTML =
+            "Three.js loaded! Starting Step 1...";
+        }
+      });
+    </script>
+    <script src="js/game.js"></script>
+  </body>
+</html>

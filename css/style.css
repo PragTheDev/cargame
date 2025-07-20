@@ -1,0 +1,82 @@
+/* Car Game Styles */
+
+/* Reset all default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Make the page full screen with black background */
+body {
+  font-family: "Arial", sans-serif;
+  overflow: hidden; /* Hide scrollbars */
+  background: #000; /* Black background */
+}
+
+/* Style for the 3D canvas (will be added by Three.js) */
+#canvas {
+  display: block;
+}
+
+/* Top-left info box */
+#ui {
+  position: absolute; /* Float over the 3D scene */
+  top: 20px;
+  left: 20px;
+  color: white;
+  font-size: 16px;
+  z-index: 100; /* Make sure it appears on top */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Blur effect behind the box */
+}
+
+/* Bottom-left controls box */
+#controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  font-size: 14px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+/* Bottom-right speedometer */
+#speedometer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: white;
+  font-size: 20px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  min-width: 120px;
+}
+
+/* Style for the speed number */
+.speed-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #00ff88; /* Green color */
+}
+
+/* Loading message in center of screen */
+#loading {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Perfect centering trick */
+  color: white;
+  font-size: 24px;
+  z-index: 200; /* Make sure it's on top of everything */
+}
