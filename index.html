@@ -30,17 +30,23 @@
     </div>
 
     <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
+    <script src="cannon.min.js"></script>
+    w
     <script>
-      // Check if Three.js loaded successfully
+      // Check if libraries loaded successfully
       window.addEventListener("load", () => {
         if (typeof THREE === "undefined") {
           document.getElementById("loading").innerHTML =
             "Error: Three.js failed to load";
           console.error("Three.js failed to load");
-        } else {
-          console.log("✅ Three.js loaded successfully!");
+        } else if (typeof CANNON === "undefined") {
           document.getElementById("loading").innerHTML =
-            "Three.js loaded! Starting Step 1...";
+            "Error: Cannon.js failed to load";
+          console.error("Cannon.js failed to load");
+        } else {
+          console.log("✅ Three.js and Cannon.js loaded successfully!");
+          document.getElementById("loading").innerHTML =
+            "Physics engine loaded! Starting game...";
         }
       });
     </script>

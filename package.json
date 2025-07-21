@@ -1,0 +1,24 @@
+{
+  "name": "cargame",
+  "version": "1.0.0",
+  "description": "A simple and fun Three.js car game where you can drive around an open world environment, similar to Bruno Simon's portfolio style. Just drive around, collect coins, and explore!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PragTheDev/cargame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PragTheDev/cargame/issues"
+  },
+  "homepage": "https://github.com/PragTheDev/cargame#readme",
+  "dependencies": {
+    "cannon": "^0.6.2",
+    "three": "^0.178.0"
+  }
+}
