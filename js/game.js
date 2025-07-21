@@ -57,7 +57,7 @@ window.addEventListener("load", () => {
 
   // Create basic scene
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87ceeb); // Light blue sky color
+  scene.background = new THREE.Color(0xb3d9ff); // Brighter, more vibrant sky blue
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -76,62 +76,84 @@ window.addEventListener("load", () => {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft, high-quality shadows
   renderer.outputEncoding = THREE.sRGBEncoding; // Better color rendering
   renderer.toneMapping = THREE.ACESFilmicToneMapping; // Professional tone mapping
-  renderer.toneMappingExposure = 1.2; // Slight exposure adjustment
+  renderer.toneMappingExposure = 1.8; // Increased exposure for brighter scene
   renderer.physicallyCorrectLights = true; // More realistic lighting
+  renderer.gammaFactor = 2.2; // Better gamma correction
+  renderer.gammaOutput = true; // Enable gamma output
   document.body.appendChild(renderer.domElement);
 
-  // === LIGHTING ===
-  // Ambient light (soft environmental lighting)
-  const ambientLight = new THREE.AmbientLight(0x404040, 0.4); // Reduced ambient for better contrast
+  // === ENHANCED LIGHTING SYSTEM ===
+  // Brighter ambient light for overall scene illumination
+  const ambientLight = new THREE.AmbientLight(0x606060, 0.7); // Much brighter ambient
   scene.add(ambientLight);
 
-  // Main directional light (sun)
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2); // Brighter main light
-  directionalLight.position.set(50, 50, 25); // Higher and further for better shadows
+  // Main directional light (sun) - significantly brighter
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); // Much brighter main light
+  directionalLight.position.set(60, 80, 40); // Higher position for better coverage
   directionalLight.castShadow = true;
 
-  // Improve shadow quality
-  directionalLight.shadow.mapSize.width = 2048;
-  directionalLight.shadow.mapSize.height = 2048;
-  directionalLight.shadow.camera.near = 0.5;
-  directionalLight.shadow.camera.far = 500;
-  directionalLight.shadow.camera.left = -100;
-  directionalLight.shadow.camera.right = 100;
-  directionalLight.shadow.camera.top = 100;
-  directionalLight.shadow.camera.bottom = -100;
-  directionalLight.shadow.bias = -0.0001;
+  // Improved shadow quality with better settings
+  directionalLight.shadow.mapSize.width = 4096; // Higher resolution shadows
+  directionalLight.shadow.mapSize.height = 4096;
+  directionalLight.shadow.camera.near = 0.1;
+  directionalLight.shadow.camera.far = 600;
+  directionalLight.shadow.camera.left = -150;
+  directionalLight.shadow.camera.right = 150;
+  directionalLight.shadow.camera.top = 150;
+  directionalLight.shadow.camera.bottom = -150;
+  directionalLight.shadow.bias = -0.0005;
+  directionalLight.shadow.normalBias = 0.02;
   scene.add(directionalLight);
 
-  // Secondary fill light (softer, opposite direction)
-  const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3); // Sky blue fill light
-  fillLight.position.set(-30, 30, -30);
+  // Secondary fill light (brighter, warmer tone)
+  const fillLight = new THREE.DirectionalLight(0xffd4a3, 0.6); // Warm fill light
+  fillLight.position.set(-40, 60, -40);
   scene.add(fillLight);
 
-  // Hemisphere light for natural sky lighting
-  const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x228b22, 0.3); // Sky to ground
+  // Third light for better rim lighting
+  const rimLight = new THREE.DirectionalLight(0xa3c7ff, 0.4); // Cool rim light
+  rimLight.position.set(30, 40, -60);
+  scene.add(rimLight);
+
+  // Brighter hemisphere light for natural sky lighting
+  const hemisphereLight = new THREE.HemisphereLight(0xb3d9ff, 0x4a7c59, 0.5); // Brighter sky to ground
   scene.add(hemisphereLight);
 
-  // === GROUND ===
-  // Create a large flat plane for the ground (professional grass texture)
+  // Add point lights for extra brightness around the scene
+  const pointLight1 = new THREE.PointLight(0xffffff, 0.8, 100);
+  pointLight1.position.set(0, 20, 0); // Central overhead light
+  scene.add(pointLight1);
+
+  const pointLight2 = new THREE.PointLight(0xffd4a3, 0.5, 80);
+  pointLight2.position.set(40, 15, 40); // Warm accent light
+  scene.add(pointLight2);
+
+  const pointLight3 = new THREE.PointLight(0xa3c7ff, 0.5, 80);
+  pointLight3.position.set(-40, 15, -40); // Cool accent light
+  scene.add(pointLight3);
+
+  // === ENHANCED GROUND ===
+  // Create a large flat plane for the ground (brighter, more vibrant grass)
   const groundGeometry = new THREE.PlaneGeometry(200, 200);
   const groundMeshMaterial = new THREE.MeshPhongMaterial({
-    color: 0x1a4a1a, // Darker, more realistic grass green
-    shininess: 5,
-    specular: 0x111111,
+    color: 0x2d5a2d, // Brighter, more vibrant grass green
+    shininess: 15,
+    specular: 0x333333,
   });
   const ground = new THREE.Mesh(groundGeometry, groundMeshMaterial);
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Add some texture variation to the ground
+  // Add brighter texture variation to the ground
   const grassPatches = [];
-  for (let i = 0; i < 15; i++) {
-    const patchGeometry = new THREE.CircleGeometry(Math.random() * 8 + 3, 16);
+  for (let i = 0; i < 20; i++) {
+    // More patches for better coverage
+    const patchGeometry = new THREE.CircleGeometry(Math.random() * 10 + 4, 16);
     const patchMaterial = new THREE.MeshPhongMaterial({
-      color: new THREE.Color().setHSL(0.25, 0.6, 0.2 + Math.random() * 0.2),
+      color: new THREE.Color().setHSL(0.25, 0.7, 0.35 + Math.random() * 0.25), // Brighter patches
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.8,
     });
     const patch = new THREE.Mesh(patchGeometry, patchMaterial);
     patch.rotation.x = -Math.PI / 2;
@@ -175,9 +197,9 @@ window.addEventListener("load", () => {
   roadSegments.forEach((road) => {
     const roadGeometry = new THREE.PlaneGeometry(road.width, road.length);
     const roadMaterial = new THREE.MeshPhongMaterial({
-      color: 0x2d2d2d, // Professional dark asphalt
-      shininess: 10,
-      specular: 0x111111,
+      color: 0x404040, // Lighter asphalt for better visibility
+      shininess: 20,
+      specular: 0x222222,
     });
     const roadMesh = new THREE.Mesh(roadGeometry, roadMaterial);
     roadMesh.rotation.x = -Math.PI / 2;
@@ -301,12 +323,12 @@ window.addEventListener("load", () => {
   rightWindow.rotation.y = -Math.PI / 2;
   car.add(rightWindow);
 
-  // Headlights
+  // Headlights - brighter and more visible
   const headlightGeometry = new THREE.SphereGeometry(0.15, 8, 8);
   const headlightMaterial = new THREE.MeshPhongMaterial({
-    color: 0xffffcc,
-    emissive: 0x444422,
-    shininess: 100,
+    color: 0xfffff0, // Brighter white
+    emissive: 0x888844, // Much brighter emission
+    shininess: 150,
   });
 
   const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
