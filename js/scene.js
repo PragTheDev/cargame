@@ -35,7 +35,7 @@ export class SceneManager {
     this.renderer.physicallyCorrectLights = true;
     this.renderer.gammaFactor = 2.2;
     this.renderer.gammaOutput = true;
-    
+
     document.body.appendChild(this.renderer.domElement);
 
     // Set initial camera position
@@ -95,8 +95,12 @@ export class SceneManager {
       { pos: [0, 25, -150], color: 0xffffff, intensity: 0.6, range: 120 },
     ];
 
-    pointLights.forEach(light => {
-      const pointLight = new THREE.PointLight(light.color, light.intensity, light.range);
+    pointLights.forEach((light) => {
+      const pointLight = new THREE.PointLight(
+        light.color,
+        light.intensity,
+        light.range
+      );
       pointLight.position.set(...light.pos);
       this.scene.add(pointLight);
     });

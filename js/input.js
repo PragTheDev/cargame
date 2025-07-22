@@ -5,7 +5,7 @@ export class InputManager {
     this.keys = {};
     this.setupKeyboardControls();
     this.setupMouseControls();
-    
+
     // Camera controls
     this.isMouseDown = false;
     this.mouseX = 0;
@@ -53,7 +53,10 @@ export class InputManager {
       this.cameraAngleY -= deltaY * 0.01;
 
       // Limit vertical angle to prevent flipping
-      this.cameraAngleY = Math.max(-Math.PI / 3, Math.min(Math.PI / 2, this.cameraAngleY));
+      this.cameraAngleY = Math.max(
+        -Math.PI / 3,
+        Math.min(Math.PI / 2, this.cameraAngleY)
+      );
 
       this.mouseX = event.clientX;
       this.mouseY = event.clientY;
@@ -89,19 +92,32 @@ export class InputManager {
     // Apply rotation first
     if (turnSpeed !== 0) {
       const currentRotation = Math.atan2(
-        2 * (carBody.quaternion.w * carBody.quaternion.y + carBody.quaternion.x * carBody.quaternion.z),
-        1 - 2 * (carBody.quaternion.y * carBody.quaternion.y + carBody.quaternion.z * carBody.quaternion.z)
+        2 *
+          (carBody.quaternion.w * carBody.quaternion.y +
+            carBody.quaternion.x * carBody.quaternion.z),
+        1 -
+          2 *
+            (carBody.quaternion.y * carBody.quaternion.y +
+              carBody.quaternion.z * carBody.quaternion.z)
       );
 
       const newRotation = currentRotation + turnSpeed * deltaTime * 0.1;
-      carBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), newRotation);
+      carBody.quaternion.setFromAxisAngle(
+        new CANNON.Vec3(0, 1, 0),
+        newRotation
+      );
     }
 
     // Apply movement
     if (moveSpeed !== 0) {
       const currentRotation = Math.atan2(
-        2 * (carBody.quaternion.w * carBody.quaternion.y + carBody.quaternion.x * carBody.quaternion.z),
-        1 - 2 * (carBody.quaternion.y * carBody.quaternion.y + carBody.quaternion.z * carBody.quaternion.z)
+        2 *
+          (carBody.quaternion.w * carBody.quaternion.y +
+            carBody.quaternion.x * carBody.quaternion.z),
+        1 -
+          2 *
+            (carBody.quaternion.y * carBody.quaternion.y +
+              carBody.quaternion.z * carBody.quaternion.z)
       );
 
       carBody.position.x += Math.sin(currentRotation) * moveSpeed * deltaTime;
@@ -126,7 +142,7 @@ export class InputManager {
   getCameraAngles() {
     return {
       x: this.cameraAngleX,
-      y: this.cameraAngleY
+      y: this.cameraAngleY,
     };
   }
 }

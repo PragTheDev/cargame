@@ -1,30 +1,28 @@
-// World/Environment Module
+// World/Environment Module - Scenic Roads
 export class WorldBuilder {
   constructor(scene, physicsSystem) {
     this.scene = scene;
     this.physics = physicsSystem;
-    this.obstacles = [];
-    this.obstaclePhysicsBodies = [];
+    this.scenery = [];
     
     this.createGround();
     this.createRoadSystem();
-    this.createObstacleCourse();
+    this.createBeautifulScenery();
   }
 
   createGround() {
-    // Create a much larger flat plane for the ground
-    const groundGeometry = new THREE.PlaneGeometry(500, 500);
-    const groundMeshMaterial = new THREE.MeshPhongMaterial({
-      color: 0x2d5a2d,
+    // Create a large flat plane for the ground
+    const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+    const groundMeshMaterial = new THREE.MeshLambertMaterial({
+      color: 0x4a7c59, // Rich forest green
       shininess: 15,
-      specular: 0x333333,
     });
     const ground = new THREE.Mesh(groundGeometry, groundMeshMaterial);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     this.scene.add(ground);
 
-    // Add grass patches for texture variation
+    // Add beautiful grass patches
     this.addGrassPatches();
 
     // Create ground physics body
@@ -32,19 +30,29 @@ export class WorldBuilder {
   }
 
   addGrassPatches() {
-    for (let i = 0; i < 50; i++) {
-      const patchGeometry = new THREE.CircleGeometry(Math.random() * 15 + 8, 16);
-      const patchMaterial = new THREE.MeshPhongMaterial({
-        color: new THREE.Color().setHSL(0.25, 0.7, 0.35 + Math.random() * 0.25),
+    for (let i = 0; i < 80; i++) {
+      const patchGeometry = new THREE.CircleGeometry(
+        Math.random() * 12 + 6,
+        16
+      );
+      
+      // Natural grass color variation
+      const hue = 0.25 + (Math.random() - 0.5) * 0.1;
+      const saturation = 0.6 + Math.random() * 0.3;
+      const lightness = 0.35 + Math.random() * 0.25;
+      
+      const patchMaterial = new THREE.MeshLambertMaterial({
+        color: new THREE.Color().setHSL(hue, saturation, lightness),
         transparent: true,
         opacity: 0.8,
       });
+      
       const patch = new THREE.Mesh(patchGeometry, patchMaterial);
       patch.rotation.x = -Math.PI / 2;
       patch.position.set(
-        (Math.random() - 0.5) * 450,
+        (Math.random() - 0.5) * 900,
         0.005,
-        (Math.random() - 0.5) * 450
+        (Math.random() - 0.5) * 900
       );
       patch.receiveShadow = true;
       this.scene.add(patch);
@@ -57,41 +65,33 @@ export class WorldBuilder {
       { x: 0, z: 0, width: 12, length: 80, rotation: 0 },
       { x: 0, z: 80, width: 12, length: 80, rotation: 0 },
       { x: 0, z: -80, width: 12, length: 80, rotation: 0 },
+      { x: 0, z: 160, width: 12, length: 80, rotation: 0 },
+      { x: 0, z: -160, width: 12, length: 80, rotation: 0 },
 
       // Cross highway (east-west)
       { x: 0, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
       { x: 80, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
       { x: -80, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
+      { x: 160, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
+      { x: -160, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
 
-      // Secondary roads
-      { x: 40, z: 40, width: 10, length: 60, rotation: 0 },
-      { x: -40, z: 40, width: 10, length: 60, rotation: 0 },
-      { x: 40, z: -40, width: 10, length: 60, rotation: 0 },
-      { x: -40, z: -40, width: 10, length: 60, rotation: 0 },
+      // Beautiful winding roads
+      { x: 120, z: 120, width: 10, length: 100, rotation: Math.PI / 4 },
+      { x: -120, z: 120, width: 10, length: 100, rotation: -Math.PI / 4 },
+      { x: 120, z: -120, width: 10, length: 100, rotation: -Math.PI / 4 },
+      { x: -120, z: -120, width: 10, length: 100, rotation: Math.PI / 4 },
 
-      // Diagonal roads
-      { x: 60, z: 60, width: 8, length: 50, rotation: Math.PI / 4 },
-      { x: -60, z: 60, width: 8, length: 50, rotation: -Math.PI / 4 },
-      { x: 60, z: -60, width: 8, length: 50, rotation: -Math.PI / 4 },
-      { x: -60, z: -60, width: 8, length: 50, rotation: Math.PI / 4 },
+      // Scenic loops
+      { x: 200, z: 50, width: 8, length: 60, rotation: Math.PI / 6 },
+      { x: -200, z: 50, width: 8, length: 60, rotation: -Math.PI / 6 },
+      { x: 200, z: -50, width: 8, length: 60, rotation: -Math.PI / 6 },
+      { x: -200, z: -50, width: 8, length: 60, rotation: Math.PI / 6 },
 
-      // Outer ring roads
-      { x: 120, z: 0, width: 8, length: 40, rotation: 0 },
-      { x: -120, z: 0, width: 8, length: 40, rotation: 0 },
-      { x: 0, z: 120, width: 8, length: 40, rotation: Math.PI / 2 },
-      { x: 0, z: -120, width: 8, length: 40, rotation: Math.PI / 2 },
-
-      // Additional sections
-      { x: 100, z: 80, width: 8, length: 30, rotation: Math.PI / 6 },
-      { x: -100, z: 80, width: 8, length: 30, rotation: -Math.PI / 6 },
-      { x: 100, z: -80, width: 8, length: 30, rotation: -Math.PI / 6 },
-      { x: -100, z: -80, width: 8, length: 30, rotation: Math.PI / 6 },
-
-      // Long distance highways
-      { x: 0, z: 160, width: 10, length: 60, rotation: 0 },
-      { x: 0, z: -160, width: 10, length: 60, rotation: 0 },
-      { x: 160, z: 0, width: 10, length: 60, rotation: Math.PI / 2 },
-      { x: -160, z: 0, width: 10, length: 60, rotation: Math.PI / 2 },
+      // Additional scenic roads
+      { x: 150, z: 200, width: 8, length: 80, rotation: Math.PI / 8 },
+      { x: -150, z: 200, width: 8, length: 80, rotation: -Math.PI / 8 },
+      { x: 150, z: -200, width: 8, length: 80, rotation: -Math.PI / 8 },
+      { x: -150, z: -200, width: 8, length: 80, rotation: Math.PI / 8 },
     ];
 
     roadSegments.forEach((road) => {
@@ -100,12 +100,11 @@ export class WorldBuilder {
   }
 
   createRoadSegment(road) {
-    // Road surface
+    // Road surface - nice dark asphalt
     const roadGeometry = new THREE.PlaneGeometry(road.width, road.length);
-    const roadMaterial = new THREE.MeshPhongMaterial({
-      color: 0x404040,
+    const roadMaterial = new THREE.MeshLambertMaterial({
+      color: 0x333333,
       shininess: 20,
-      specular: 0x222222,
     });
     const roadMesh = new THREE.Mesh(roadGeometry, roadMaterial);
     roadMesh.rotation.x = -Math.PI / 2;
@@ -121,10 +120,9 @@ export class WorldBuilder {
   addRoadMarkings(road) {
     // Center line (yellow)
     const lineGeometry = new THREE.PlaneGeometry(0.15, road.length * 0.8);
-    const lineMaterial = new THREE.MeshPhongMaterial({
+    const lineMaterial = new THREE.MeshLambertMaterial({
       color: 0xffd700,
       emissive: 0x221100,
-      shininess: 50,
     });
     const centerLine = new THREE.Mesh(lineGeometry, lineMaterial);
     centerLine.rotation.x = -Math.PI / 2;
@@ -133,9 +131,8 @@ export class WorldBuilder {
     this.scene.add(centerLine);
 
     // Edge lines (white)
-    const edgeMaterial = new THREE.MeshPhongMaterial({
+    const edgeMaterial = new THREE.MeshLambertMaterial({
       color: 0xf5f5f5,
-      shininess: 30,
     });
 
     const leftEdgeGeometry = new THREE.PlaneGeometry(0.1, road.length * 0.9);
@@ -164,244 +161,171 @@ export class WorldBuilder {
     this.scene.add(rightEdge);
   }
 
-  createObstacleCourse() {
-    this.createBarriers();
-    this.createTrafficCones();
-    this.createBuildings();
-    this.createPillars();
-    this.createRamps();
+  createBeautifulScenery() {
+    this.createTrees();
+    this.createMountains();
+    this.createRocks();
+    this.createLakes();
+    this.createFlowerFields();
   }
 
-  createBarriers() {
-    const barriers = [
-      // Main highway barriers
-      { x: 6.5, z: -40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
-      { x: -6.5, z: -40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
-      { x: 6.5, z: 40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
-      { x: -6.5, z: 40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
+  createTrees() {
+    // Create beautiful trees around the world
+    for (let i = 0; i < 150; i++) {
+      const treeX = (Math.random() - 0.5) * 900;
+      const treeZ = (Math.random() - 0.5) * 900;
+      
+      // Avoid placing trees on roads by checking distance from road centers
+      const tooCloseToRoad = this.isNearRoad(treeX, treeZ, 15);
+      if (tooCloseToRoad) continue;
+      
+      // Create tree trunk
+      const trunkHeight = 6 + Math.random() * 8;
+      const trunkGeometry = new THREE.CylinderGeometry(0.4, 0.6, trunkHeight, 8);
+      const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+      const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+      trunk.position.set(treeX, trunkHeight / 2, treeZ);
+      trunk.castShadow = true;
+      trunk.receiveShadow = true;
+      this.scene.add(trunk);
+      this.scenery.push(trunk);
+      
+      // Create tree crown
+      const crownRadius = 3 + Math.random() * 3;
+      const crownGeometry = new THREE.SphereGeometry(crownRadius, 8, 6);
+      const crownMaterial = new THREE.MeshLambertMaterial({ 
+        color: new THREE.Color().setHSL(0.25, 0.7, 0.3 + Math.random() * 0.2)
+      });
+      const crown = new THREE.Mesh(crownGeometry, crownMaterial);
+      crown.position.set(treeX, trunkHeight + crownRadius * 0.6, treeZ);
+      crown.castShadow = true;
+      crown.receiveShadow = true;
+      this.scene.add(crown);
+      this.scenery.push(crown);
+    }
+  }
 
-      // Cross highway barriers
-      { x: 40, z: 6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
-      { x: 40, z: -6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
-      { x: -40, z: 6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
-      { x: -40, z: -6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
-
-      // Outer area barriers
-      { x: 90, z: 90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
-      { x: -90, z: 90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
-      { x: 90, z: -90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
-      { x: -90, z: -90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
+  isNearRoad(x, z, minDistance) {
+    // Check if position is too close to any major road intersections
+    const roadCenters = [
+      { x: 0, z: 0 }, { x: 0, z: 80 }, { x: 0, z: -80 },
+      { x: 80, z: 0 }, { x: -80, z: 0 },
+      { x: 120, z: 120 }, { x: -120, z: 120 },
+      { x: 120, z: -120 }, { x: -120, z: -120 }
     ];
-
-    barriers.forEach((barrier) => {
-      this.createObstacle('box', barrier);
-    });
+    
+    for (const road of roadCenters) {
+      const distance = Math.sqrt((x - road.x) ** 2 + (z - road.z) ** 2);
+      if (distance < minDistance) return true;
+    }
+    return false;
   }
 
-  createTrafficCones() {
-    const cones = [
-      // Main highway slalom
-      { x: -3, z: -60, color: 0xff4500 },
-      { x: 3, z: -70, color: 0xff4500 },
-      { x: -3, z: -80, color: 0xff4500 },
-      { x: 3, z: -90, color: 0xff4500 },
-
-      // Cross road slalom
-      { x: -60, z: -3, color: 0xff4500 },
-      { x: -70, z: 3, color: 0xff4500 },
-      { x: -80, z: -3, color: 0xff4500 },
-      { x: -90, z: 3, color: 0xff4500 },
-
-      // Additional areas
-      { x: 35, z: 60, color: 0xff4500 },
-      { x: 45, z: 65, color: 0xff4500 },
-      { x: 35, z: 70, color: 0xff4500 },
-      { x: 45, z: 75, color: 0xff4500 },
-      { x: 120, z: 25, color: 0xff4500 },
-      { x: 115, z: 30, color: 0xff4500 },
-      { x: 120, z: 35, color: 0xff4500 },
-      { x: -120, z: -25, color: 0xff4500 },
-      { x: -115, z: -30, color: 0xff4500 },
-      { x: -120, z: -35, color: 0xff4500 },
+  createMountains() {
+    // Create distant mountains for scenery
+    const mountainPositions = [
+      { x: 400, z: 400 }, { x: -400, z: 400 },
+      { x: 400, z: -400 }, { x: -400, z: -400 },
+      { x: 0, z: 450 }, { x: 450, z: 0 },
+      { x: 0, z: -450 }, { x: -450, z: 0 }
     ];
-
-    cones.forEach((cone) => {
-      this.createCone(cone);
+    
+    mountainPositions.forEach(pos => {
+      const mountainHeight = 40 + Math.random() * 30;
+      const mountainWidth = 50 + Math.random() * 40;
+      
+      const mountainGeometry = new THREE.ConeGeometry(mountainWidth, mountainHeight, 8);
+      const mountainMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x696969,
+        transparent: true,
+        opacity: 0.7
+      });
+      
+      const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
+      mountain.position.set(pos.x, mountainHeight / 2, pos.z);
+      mountain.castShadow = true;
+      mountain.receiveShadow = true;
+      this.scene.add(mountain);
+      this.scenery.push(mountain);
     });
   }
 
-  createBuildings() {
-    const buildings = [
-      // Central city area
-      { x: 25, z: 25, width: 4, height: 6, depth: 4, color: 0x8b4513 },
-      { x: -25, z: 25, width: 3, height: 5, depth: 3, color: 0x696969 },
-      { x: 25, z: -25, width: 5, height: 4, depth: 5, color: 0x654321 },
-      { x: -25, z: -25, width: 3, height: 7, depth: 3, color: 0x8b4513 },
+  createRocks() {
+    // Scatter decorative rocks
+    for (let i = 0; i < 60; i++) {
+      const rockX = (Math.random() - 0.5) * 800;
+      const rockZ = (Math.random() - 0.5) * 800;
+      
+      // Avoid roads
+      if (this.isNearRoad(rockX, rockZ, 10)) continue;
+      
+      const rockSize = 1 + Math.random() * 2;
+      const rockGeometry = new THREE.DodecahedronGeometry(rockSize);
+      const rockMaterial = new THREE.MeshLambertMaterial({ color: 0x708090 });
+      const rock = new THREE.Mesh(rockGeometry, rockMaterial);
+      rock.position.set(rockX, rockSize, rockZ);
+      rock.rotation.x = Math.random() * Math.PI;
+      rock.rotation.y = Math.random() * Math.PI;
+      rock.rotation.z = Math.random() * Math.PI;
+      rock.castShadow = true;
+      rock.receiveShadow = true;
+      this.scene.add(rock);
+      this.scenery.push(rock);
+    }
+  }
 
-      // Eastern district
-      { x: 70, z: 30, width: 6, height: 8, depth: 4, color: 0x708090 },
-      { x: 80, z: 50, width: 4, height: 6, depth: 6, color: 0x2f4f4f },
-      { x: 90, z: 20, width: 3, height: 5, depth: 3, color: 0x696969 },
-      { x: 75, z: 70, width: 5, height: 4, depth: 4, color: 0x8b4513 },
-
-      // Western district
-      { x: -70, z: 30, width: 4, height: 7, depth: 5, color: 0x654321 },
-      { x: -80, z: 50, width: 6, height: 5, depth: 3, color: 0x708090 },
-      { x: -90, z: 20, width: 3, height: 6, depth: 4, color: 0x2f4f4f },
-      { x: -75, z: 70, width: 4, height: 8, depth: 4, color: 0x696969 },
-
-      // Additional districts
-      { x: 30, z: 80, width: 5, height: 6, depth: 5, color: 0x8b4513 },
-      { x: 50, z: 90, width: 3, height: 4, depth: 3, color: 0x708090 },
-      { x: 20, z: 100, width: 4, height: 7, depth: 4, color: 0x2f4f4f },
-      { x: -30, z: 80, width: 6, height: 5, depth: 4, color: 0x654321 },
-      { x: -50, z: 90, width: 3, height: 6, depth: 5, color: 0x696969 },
-      { x: 30, z: -80, width: 4, height: 5, depth: 4, color: 0x708090 },
-      { x: 50, z: -90, width: 5, height: 7, depth: 3, color: 0x8b4513 },
-      { x: 20, z: -100, width: 3, height: 4, depth: 6, color: 0x2f4f4f },
-      { x: -30, z: -80, width: 6, height: 6, depth: 4, color: 0x654321 },
-      { x: -50, z: -90, width: 4, height: 8, depth: 4, color: 0x696969 },
-
-      // Suburban areas
-      { x: 130, z: 60, width: 8, height: 3, depth: 6, color: 0x8b4513 },
-      { x: -130, z: 60, width: 6, height: 4, depth: 8, color: 0x696969 },
-      { x: 130, z: -60, width: 7, height: 5, depth: 5, color: 0x708090 },
-      { x: -130, z: -60, width: 5, height: 6, depth: 7, color: 0x654321 },
+  createLakes() {
+    // Create a few beautiful lakes
+    const lakePositions = [
+      { x: 250, z: 250, radius: 25 },
+      { x: -250, z: 250, radius: 20 },
+      { x: 250, z: -250, radius: 30 },
+      { x: -250, z: -250, radius: 18 }
     ];
-
-    buildings.forEach((building) => {
-      this.createObstacle('box', building);
+    
+    lakePositions.forEach(lake => {
+      const lakeGeometry = new THREE.CircleGeometry(lake.radius, 32);
+      const lakeMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x4169E1,
+        transparent: true,
+        opacity: 0.8,
+        shininess: 100
+      });
+      
+      const lakeMesh = new THREE.Mesh(lakeGeometry, lakeMaterial);
+      lakeMesh.rotation.x = -Math.PI / 2;
+      lakeMesh.position.set(lake.x, 0.02, lake.z);
+      lakeMesh.receiveShadow = true;
+      this.scene.add(lakeMesh);
+      this.scenery.push(lakeMesh);
     });
   }
 
-  createPillars() {
-    const pillars = [
-      { x: -15, z: 60, radius: 0.5, height: 3, color: 0x2f4f4f },
-      { x: 15, z: 60, radius: 0.5, height: 3, color: 0x2f4f4f },
-      { x: -15, z: -60, radius: 0.4, height: 4, color: 0x8b4513 },
-      { x: 15, z: -60, radius: 0.4, height: 4, color: 0x8b4513 },
-      { x: 65, z: 0, radius: 0.6, height: 3.5, color: 0x556b2f },
-      { x: 85, z: 25, radius: 0.5, height: 4, color: 0x2f4f4f },
-      { x: 105, z: -15, radius: 0.4, height: 2.5, color: 0x8b4513 },
-      { x: 125, z: 35, radius: 0.7, height: 3, color: 0x556b2f },
-      { x: -65, z: 0, radius: 0.6, height: 3.5, color: 0x556b2f },
-      { x: -85, z: 25, radius: 0.5, height: 4, color: 0x2f4f4f },
-      { x: -105, z: -15, radius: 0.4, height: 2.5, color: 0x8b4513 },
-      { x: -125, z: 35, radius: 0.7, height: 3, color: 0x556b2f },
-    ];
-
-    pillars.forEach((pillar) => {
-      this.createCylinder(pillar);
-    });
-  }
-
-  createRamps() {
-    const ramps = [
-      { x: 70, z: -10, width: 8, height: 0.8, depth: 4, rotation: Math.PI / 12 },
-      { x: -70, z: -10, width: 8, height: 0.8, depth: 4, rotation: -Math.PI / 12 },
-      { x: 40, z: 110, width: 6, height: 0.6, depth: 3, rotation: Math.PI / 15 },
-      { x: -40, z: 110, width: 6, height: 0.6, depth: 3, rotation: -Math.PI / 15 },
-      { x: 40, z: -110, width: 6, height: 0.6, depth: 3, rotation: Math.PI / 15 },
-      { x: -40, z: -110, width: 6, height: 0.6, depth: 3, rotation: -Math.PI / 15 },
-      { x: 140, z: 20, width: 10, height: 1.0, depth: 5, rotation: Math.PI / 10 },
-      { x: -140, z: 20, width: 10, height: 1.0, depth: 5, rotation: -Math.PI / 10 },
-    ];
-
-    ramps.forEach((ramp) => {
-      this.createRamp(ramp);
-    });
-  }
-
-  createObstacle(type, params) {
-    const geometry = new THREE.BoxGeometry(params.width, params.height, params.depth);
-    const material = new THREE.MeshLambertMaterial({ color: params.color });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(params.x, params.height / 2, params.z);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    this.scene.add(mesh);
-    this.obstacles.push(mesh);
-
-    // Physics body
-    const shape = new CANNON.Box(
-      new CANNON.Vec3(params.width / 2, params.height / 2, params.depth / 2)
-    );
-    const body = new CANNON.Body({
-      mass: 0,
-      position: new CANNON.Vec3(params.x, params.height / 2, params.z),
-      material: this.physics.materials.obstacle,
-    });
-    body.addShape(shape);
-    this.physics.addBody(body);
-    this.obstaclePhysicsBodies.push(body);
-  }
-
-  createCone(params) {
-    const coneGeometry = new THREE.ConeGeometry(0.3, 0.8, 8);
-    const coneMaterial = new THREE.MeshLambertMaterial({ color: params.color });
-    const coneMesh = new THREE.Mesh(coneGeometry, coneMaterial);
-    coneMesh.position.set(params.x, 0.4, params.z);
-    coneMesh.castShadow = true;
-    this.scene.add(coneMesh);
-    this.obstacles.push(coneMesh);
-
-    // Physics body
-    const coneShape = new CANNON.Cylinder(0.3, 0.1, 0.8, 8);
-    const coneBody = new CANNON.Body({
-      mass: 5,
-      position: new CANNON.Vec3(params.x, 0.4, params.z),
-      material: this.physics.materials.obstacle,
-    });
-    coneBody.addShape(coneShape);
-    this.physics.addBody(coneBody);
-    this.obstaclePhysicsBodies.push(coneBody);
-  }
-
-  createCylinder(params) {
-    const geometry = new THREE.CylinderGeometry(params.radius, params.radius, params.height, 8);
-    const material = new THREE.MeshLambertMaterial({ color: params.color });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(params.x, params.height / 2, params.z);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    this.scene.add(mesh);
-    this.obstacles.push(mesh);
-
-    // Physics body
-    const shape = new CANNON.Cylinder(params.radius, params.radius, params.height, 8);
-    const body = new CANNON.Body({
-      mass: 0,
-      position: new CANNON.Vec3(params.x, params.height / 2, params.z),
-      material: this.physics.materials.obstacle,
-    });
-    body.addShape(shape);
-    this.physics.addBody(body);
-    this.obstaclePhysicsBodies.push(body);
-  }
-
-  createRamp(params) {
-    const geometry = new THREE.BoxGeometry(params.width, params.height, params.depth);
-    const material = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(params.x, params.height / 2, params.z);
-    mesh.rotation.x = params.rotation;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    this.scene.add(mesh);
-    this.obstacles.push(mesh);
-
-    // Physics body
-    const shape = new CANNON.Box(
-      new CANNON.Vec3(params.width / 2, params.height / 2, params.depth / 2)
-    );
-    const body = new CANNON.Body({
-      mass: 0,
-      position: new CANNON.Vec3(params.x, params.height / 2, params.z),
-      material: this.physics.materials.obstacle,
-    });
-    body.addShape(shape);
-    body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), params.rotation);
-    this.physics.addBody(body);
-    this.obstaclePhysicsBodies.push(body);
+  createFlowerFields() {
+    // Create colorful flower fields
+    for (let i = 0; i < 30; i++) {
+      const fieldX = (Math.random() - 0.5) * 700;
+      const fieldZ = (Math.random() - 0.5) * 700;
+      
+      // Avoid roads
+      if (this.isNearRoad(fieldX, fieldZ, 20)) continue;
+      
+      const fieldRadius = 8 + Math.random() * 12;
+      const flowerColors = [0xff69b4, 0xff1493, 0xffd700, 0xff4500, 0x9370db, 0x00ced1, 0xff6347];
+      const flowerColor = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+      
+      const fieldGeometry = new THREE.CircleGeometry(fieldRadius, 16);
+      const fieldMaterial = new THREE.MeshLambertMaterial({
+        color: flowerColor,
+        transparent: true,
+        opacity: 0.7,
+      });
+      
+      const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+      field.rotation.x = -Math.PI / 2;
+      field.position.set(fieldX, 0.01, fieldZ);
+      this.scene.add(field);
+      this.scenery.push(field);
+    }
   }
 }

@@ -6,7 +6,7 @@ export class Car {
     this.group = new THREE.Group();
     this.wheels = [];
     this.physicsBody = null;
-    
+
     this.createVisualModel();
     this.createPhysicsBody();
   }

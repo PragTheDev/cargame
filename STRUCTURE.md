@@ -16,21 +16,25 @@ js/
 ## 🎮 Features
 
 ### Core Systems
+
 - **Physics Engine**: Cannon.js for realistic car physics and collision detection
 - **3D Graphics**: Three.js for professional rendering with shadows and lighting
 - **Modular Architecture**: Clean separation of concerns for maintainability
 
 ### Camera Modes
+
 1. **Follow Camera** (Key: 1) - Mouse-controlled camera that orbits around the car
 2. **Chase Camera** (Key: 2) - Fixed camera that follows behind the car
 3. **First Person** (Key: 3) - Driver's view from inside the car
 
 ### Controls
+
 - **WASD** or **Arrow Keys** - Drive the car
 - **Mouse** - Look around (in Follow camera mode)
 - **1, 2, 3** - Switch between camera modes
 
 ### World Features
+
 - Large 500x500 unit world
 - Comprehensive road network with markings
 - Dynamic obstacles course with:
@@ -44,6 +48,7 @@ js/
 ## 🔧 Module Descriptions
 
 ### main.js - Game Manager
+
 - **Purpose**: Central game coordinator and main game loop
 - **Responsibilities**:
   - Initialize all game systems
@@ -52,6 +57,7 @@ js/
   - Coordinate between different modules
 
 ### physics.js - Physics System
+
 - **Purpose**: Manage Cannon.js physics world
 - **Responsibilities**:
   - Setup physics world with gravity and collision detection
@@ -60,6 +66,7 @@ js/
   - Step physics simulation each frame
 
 ### scene.js - Scene Manager
+
 - **Purpose**: Manage Three.js rendering pipeline
 - **Responsibilities**:
   - Setup scene, camera, and renderer
@@ -68,6 +75,7 @@ js/
   - Manage shadow mapping and tone mapping
 
 ### car.js - Car Module
+
 - **Purpose**: Complete car implementation (visual + physics)
 - **Responsibilities**:
   - Create detailed car visual model (body, wheels, lights, windows)
@@ -76,6 +84,7 @@ js/
   - Handle wheel animations and steering
 
 ### world.js - World Builder
+
 - **Purpose**: Create the game environment
 - **Responsibilities**:
   - Generate ground terrain with grass patches
@@ -84,6 +93,7 @@ js/
   - Setup physics bodies for all static objects
 
 ### input.js - Input Manager
+
 - **Purpose**: Handle all user input
 - **Responsibilities**:
   - Manage keyboard controls for car movement
@@ -92,6 +102,7 @@ js/
   - Maintain input state and key mappings
 
 ### camera.js - Camera Controller
+
 - **Purpose**: Manage multiple camera modes
 - **Responsibilities**:
   - Implement three different camera modes
@@ -110,18 +121,21 @@ js/
 ## 🛠️ Development Benefits
 
 ### Modular Design
+
 - **Maintainability**: Each module has a single responsibility
 - **Reusability**: Modules can be easily reused or swapped
 - **Debugging**: Issues can be isolated to specific modules
 - **Testing**: Individual modules can be tested separately
 
 ### Clean Architecture
+
 - **ES6 Modules**: Modern JavaScript module system
 - **Class-based**: Object-oriented approach for better organization
 - **Dependency Injection**: Modules receive dependencies rather than creating them
 - **Event-driven**: Loose coupling between modules
 
 ### Performance Optimizations
+
 - **Efficient Physics**: Optimized physics simulation with proper materials
 - **Smart Rendering**: Professional lighting with LOD considerations
 - **Memory Management**: Proper cleanup and resource management

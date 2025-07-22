@@ -31,7 +31,7 @@ export class PhysicsSystem {
         restitution: 0.3,
       }
     );
-    
+
     const carObstacleContact = new CANNON.ContactMaterial(
       this.materials.car,
       this.materials.obstacle,

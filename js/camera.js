@@ -21,9 +21,15 @@ export class CameraController {
 
     // Camera button controls (if UI exists)
     try {
-      document.getElementById("camera-1")?.addEventListener("click", () => this.switchCamera(1));
-      document.getElementById("camera-2")?.addEventListener("click", () => this.switchCamera(2));
-      document.getElementById("camera-3")?.addEventListener("click", () => this.switchCamera(3));
+      document
+        .getElementById("camera-1")
+        ?.addEventListener("click", () => this.switchCamera(1));
+      document
+        .getElementById("camera-2")
+        ?.addEventListener("click", () => this.switchCamera(2));
+      document
+        .getElementById("camera-3")
+        ?.addEventListener("click", () => this.switchCamera(3));
     } catch (e) {
       // UI elements don't exist yet, that's okay
     }
@@ -31,10 +37,12 @@ export class CameraController {
 
   switchCamera(mode) {
     this.currentMode = mode;
-    
+
     // Update button states if they exist
     try {
-      document.querySelectorAll(".camera-btn").forEach(btn => btn.classList.remove("active"));
+      document
+        .querySelectorAll(".camera-btn")
+        .forEach((btn) => btn.classList.remove("active"));
       document.getElementById(`camera-${mode}`)?.classList.add("active");
     } catch (e) {
       // UI elements don't exist, that's okay
@@ -59,11 +67,13 @@ export class CameraController {
     const cameraDistance = 12;
     const angles = inputManager.getCameraAngles();
     const carPosition = this.car.getPosition();
-    
+
     // Calculate camera position using spherical coordinates
-    const cameraX = carPosition.x + Math.sin(angles.x) * Math.cos(angles.y) * cameraDistance;
+    const cameraX =
+      carPosition.x + Math.sin(angles.x) * Math.cos(angles.y) * cameraDistance;
     const cameraY = carPosition.y + Math.sin(angles.y) * cameraDistance + 2;
-    const cameraZ = carPosition.z + Math.cos(angles.x) * Math.cos(angles.y) * cameraDistance;
+    const cameraZ =
+      carPosition.z + Math.cos(angles.x) * Math.cos(angles.y) * cameraDistance;
 
     // Smoothly move camera to target position
     const targetPosition = new THREE.Vector3(cameraX, cameraY, cameraZ);
@@ -74,11 +84,16 @@ export class CameraController {
   updateChaseCamera() {
     const carBody = this.car.getPhysicsBody();
     const carPosition = this.car.getPosition();
-    
+
     // Get car's rotation for positioning camera behind it
     const carRotation = Math.atan2(
-      2 * (carBody.quaternion.w * carBody.quaternion.y + carBody.quaternion.x * carBody.quaternion.z),
-      1 - 2 * (carBody.quaternion.y * carBody.quaternion.y + carBody.quaternion.z * carBody.quaternion.z)
+      2 *
+        (carBody.quaternion.w * carBody.quaternion.y +
+          carBody.quaternion.x * carBody.quaternion.z),
+      1 -
+        2 *
+          (carBody.quaternion.y * carBody.quaternion.y +
+            carBody.quaternion.z * carBody.quaternion.z)
     );
 
     // Position camera behind the car
@@ -96,11 +111,16 @@ export class CameraController {
   updateFirstPersonCamera() {
     const carBody = this.car.getPhysicsBody();
     const carPosition = this.car.getPosition();
-    
+
     // Position camera inside the car, slightly forward and up
     const carRotation = Math.atan2(
-      2 * (carBody.quaternion.w * carBody.quaternion.y + carBody.quaternion.x * carBody.quaternion.z),
-      1 - 2 * (carBody.quaternion.y * carBody.quaternion.y + carBody.quaternion.z * carBody.quaternion.z)
+      2 *
+        (carBody.quaternion.w * carBody.quaternion.y +
+          carBody.quaternion.x * carBody.quaternion.z),
+      1 -
+        2 *
+          (carBody.quaternion.y * carBody.quaternion.y +
+            carBody.quaternion.z * carBody.quaternion.z)
     );
 
     const cameraX = carPosition.x + Math.sin(carRotation) * 0.5;

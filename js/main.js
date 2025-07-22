@@ -1,16 +1,16 @@
 // Game Manager - Main Module
-import { PhysicsSystem } from './physics.js';
-import { SceneManager } from './scene.js';
-import { Car } from './car.js';
-import { WorldBuilder } from './world.js';
-import { InputManager } from './input.js';
-import { CameraController } from './camera.js';
+import { PhysicsSystem } from "./physics.js";
+import { SceneManager } from "./scene.js";
+import { Car } from "./car.js";
+import { WorldBuilder } from "./world.js";
+import { InputManager } from "./input.js";
+import { CameraController } from "./camera.js";
 
 class GameManager {
   constructor() {
     this.clock = new THREE.Clock();
     this.isInitialized = false;
-    
+
     // Initialize core systems
     this.physics = null;
     this.scene = null;
@@ -26,7 +26,8 @@ class GameManager {
     // Wait for libraries to load
     if (typeof THREE === "undefined") {
       console.error("❌ Three.js not loaded");
-      document.getElementById("loading").innerHTML = "Error: Three.js failed to load";
+      document.getElementById("loading").innerHTML =
+        "Error: Three.js failed to load";
       return;
     }
 
@@ -34,7 +35,8 @@ class GameManager {
 
     if (typeof CANNON === "undefined") {
       console.error("❌ Cannon.js not loaded");
-      document.getElementById("loading").innerHTML = "Error: Cannon.js failed to load";
+      document.getElementById("loading").innerHTML =
+        "Error: Cannon.js failed to load";
       return;
     }
 
@@ -61,10 +63,10 @@ class GameManager {
       console.log("🎮 Use WASD or Arrow Keys to drive the car!");
       console.log("🎥 Use 1, 2, 3 keys to switch camera modes!");
       console.log("🚧 Car will collide with obstacles - drive carefully!");
-
     } catch (error) {
       console.error("❌ Error initializing game:", error);
-      document.getElementById("loading").innerHTML = "Error: Failed to initialize game";
+      document.getElementById("loading").innerHTML =
+        "Error: Failed to initialize game";
     }
   }
 
@@ -85,7 +87,7 @@ class GameManager {
       <button id="camera-2" class="camera-btn">Chase</button>
       <button id="camera-3" class="camera-btn">First Person</button>
     `;
-    
+
     // Add CSS styling
     cameraSelector.style.cssText = `
       position: absolute;
@@ -103,8 +105,8 @@ class GameManager {
     document.body.appendChild(cameraSelector);
 
     // Style the buttons
-    const buttons = cameraSelector.querySelectorAll('.camera-btn');
-    buttons.forEach(btn => {
+    const buttons = cameraSelector.querySelectorAll(".camera-btn");
+    buttons.forEach((btn) => {
       btn.style.cssText = `
         background: rgba(255, 255, 255, 0.1);
         border: 2px solid rgba(255, 255, 255, 0.3);
@@ -117,33 +119,39 @@ class GameManager {
         transition: all 0.3s ease;
       `;
 
-      btn.addEventListener('mouseover', () => {
-        if (!btn.classList.contains('active')) {
-          btn.style.background = 'rgba(255, 255, 255, 0.2)';
-          btn.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+      btn.addEventListener("mouseover", () => {
+        if (!btn.classList.contains("active")) {
+          btn.style.background = "rgba(255, 255, 255, 0.2)";
+          btn.style.borderColor = "rgba(255, 255, 255, 0.5)";
         }
       });
 
-      btn.addEventListener('mouseout', () => {
-        if (!btn.classList.contains('active')) {
-          btn.style.background = 'rgba(255, 255, 255, 0.1)';
-          btn.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+      btn.addEventListener("mouseout", () => {
+        if (!btn.classList.contains("active")) {
+          btn.style.background = "rgba(255, 255, 255, 0.1)";
+          btn.style.borderColor = "rgba(255, 255, 255, 0.3)";
         }
       });
     });
 
     // Set active button style
-    const activeBtn = cameraSelector.querySelector('.active');
+    const activeBtn = cameraSelector.querySelector(".active");
     if (activeBtn) {
-      activeBtn.style.background = 'rgba(0, 255, 136, 0.3)';
-      activeBtn.style.borderColor = '#00ff88';
-      activeBtn.style.color = '#00ff88';
+      activeBtn.style.background = "rgba(0, 255, 136, 0.3)";
+      activeBtn.style.borderColor = "#00ff88";
+      activeBtn.style.color = "#00ff88";
     }
 
     // Setup button click handlers
-    document.getElementById("camera-1").addEventListener("click", () => this.switchCameraButton(1));
-    document.getElementById("camera-2").addEventListener("click", () => this.switchCameraButton(2));
-    document.getElementById("camera-3").addEventListener("click", () => this.switchCameraButton(3));
+    document
+      .getElementById("camera-1")
+      .addEventListener("click", () => this.switchCameraButton(1));
+    document
+      .getElementById("camera-2")
+      .addEventListener("click", () => this.switchCameraButton(2));
+    document
+      .getElementById("camera-3")
+      .addEventListener("click", () => this.switchCameraButton(3));
 
     // Update controls text
     const controlsElement = document.getElementById("controls");
@@ -159,18 +167,18 @@ class GameManager {
 
   switchCameraButton(mode) {
     // Update button states
-    document.querySelectorAll(".camera-btn").forEach(btn => {
+    document.querySelectorAll(".camera-btn").forEach((btn) => {
       btn.classList.remove("active");
-      btn.style.background = 'rgba(255, 255, 255, 0.1)';
-      btn.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-      btn.style.color = 'white';
+      btn.style.background = "rgba(255, 255, 255, 0.1)";
+      btn.style.borderColor = "rgba(255, 255, 255, 0.3)";
+      btn.style.color = "white";
     });
-    
+
     const activeBtn = document.getElementById(`camera-${mode}`);
     activeBtn.classList.add("active");
-    activeBtn.style.background = 'rgba(0, 255, 136, 0.3)';
-    activeBtn.style.borderColor = '#00ff88';
-    activeBtn.style.color = '#00ff88';
+    activeBtn.style.background = "rgba(0, 255, 136, 0.3)";
+    activeBtn.style.borderColor = "#00ff88";
+    activeBtn.style.color = "#00ff88";
 
     // Switch camera mode
     this.cameraController.switchCamera(mode);
@@ -217,7 +225,7 @@ class GameManager {
   // Handle window resize
   onWindowResize() {
     if (!this.scene) return;
-    
+
     this.scene.camera.aspect = window.innerWidth / window.innerHeight;
     this.scene.camera.updateProjectionMatrix();
     this.scene.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -230,7 +238,7 @@ window.addEventListener("load", () => {
   game.init();
 
   // Handle window resize
-  window.addEventListener('resize', () => game.onWindowResize());
+  window.addEventListener("resize", () => game.onWindowResize());
 
   // Make game globally accessible for debugging
   window.game = game;
