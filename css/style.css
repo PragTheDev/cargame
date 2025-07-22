@@ -47,6 +47,44 @@ body {
   backdrop-filter: blur(10px);
 }
 
+/* Camera selector box */
+#camera-selector {
+  position: absolute;
+  bottom: 20px;
+  left: 200px;
+  color: white;
+  font-size: 14px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+/* Camera buttons */
+.camera-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.camera-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.camera-btn.active {
+  background: rgba(0, 255, 136, 0.3);
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
 /* Bottom-right speedometer */
 #speedometer {
   position: absolute;
