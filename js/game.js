@@ -92,15 +92,15 @@ window.addEventListener("load", () => {
   directionalLight.position.set(60, 80, 40); // Higher position for better coverage
   directionalLight.castShadow = true;
 
-  // Improved shadow quality with better settings
+  // Improved shadow quality with better settings for larger world
   directionalLight.shadow.mapSize.width = 4096; // Higher resolution shadows
   directionalLight.shadow.mapSize.height = 4096;
   directionalLight.shadow.camera.near = 0.1;
-  directionalLight.shadow.camera.far = 600;
-  directionalLight.shadow.camera.left = -150;
-  directionalLight.shadow.camera.right = 150;
-  directionalLight.shadow.camera.top = 150;
-  directionalLight.shadow.camera.bottom = -150;
+  directionalLight.shadow.camera.far = 1000; // Increased far distance for bigger world
+  directionalLight.shadow.camera.left = -300; // Expanded shadow coverage
+  directionalLight.shadow.camera.right = 300;
+  directionalLight.shadow.camera.top = 300;
+  directionalLight.shadow.camera.bottom = -300;
   directionalLight.shadow.bias = -0.0005;
   directionalLight.shadow.normalBias = 0.02;
   scene.add(directionalLight);
@@ -119,22 +119,39 @@ window.addEventListener("load", () => {
   const hemisphereLight = new THREE.HemisphereLight(0xb3d9ff, 0x4a7c59, 0.5); // Brighter sky to ground
   scene.add(hemisphereLight);
 
-  // Add point lights for extra brightness around the scene
-  const pointLight1 = new THREE.PointLight(0xffffff, 0.8, 100);
+  // Add point lights for extra brightness around the larger scene
+  const pointLight1 = new THREE.PointLight(0xffffff, 0.8, 200); // Increased range for bigger world
   pointLight1.position.set(0, 20, 0); // Central overhead light
   scene.add(pointLight1);
 
-  const pointLight2 = new THREE.PointLight(0xffd4a3, 0.5, 80);
-  pointLight2.position.set(40, 15, 40); // Warm accent light
+  const pointLight2 = new THREE.PointLight(0xffd4a3, 0.5, 150);
+  pointLight2.position.set(100, 15, 100); // Warm accent light (further out)
   scene.add(pointLight2);
 
-  const pointLight3 = new THREE.PointLight(0xa3c7ff, 0.5, 80);
-  pointLight3.position.set(-40, 15, -40); // Cool accent light
+  const pointLight3 = new THREE.PointLight(0xa3c7ff, 0.5, 150);
+  pointLight3.position.set(-100, 15, -100); // Cool accent light (further out)
   scene.add(pointLight3);
 
+  // Additional lights for better coverage in the expanded world
+  const pointLight4 = new THREE.PointLight(0xffffff, 0.6, 120);
+  pointLight4.position.set(150, 25, 0); // East light
+  scene.add(pointLight4);
+
+  const pointLight5 = new THREE.PointLight(0xffffff, 0.6, 120);
+  pointLight5.position.set(-150, 25, 0); // West light
+  scene.add(pointLight5);
+
+  const pointLight6 = new THREE.PointLight(0xffffff, 0.6, 120);
+  pointLight6.position.set(0, 25, 150); // North light
+  scene.add(pointLight6);
+
+  const pointLight7 = new THREE.PointLight(0xffffff, 0.6, 120);
+  pointLight7.position.set(0, 25, -150); // South light
+  scene.add(pointLight7);
+
   // === ENHANCED GROUND ===
-  // Create a large flat plane for the ground (brighter, more vibrant grass)
-  const groundGeometry = new THREE.PlaneGeometry(200, 200);
+  // Create a much larger flat plane for the ground (expanded world)
+  const groundGeometry = new THREE.PlaneGeometry(500, 500); // Much bigger world
   const groundMeshMaterial = new THREE.MeshPhongMaterial({
     color: 0x2d5a2d, // Brighter, more vibrant grass green
     shininess: 15,
@@ -145,11 +162,11 @@ window.addEventListener("load", () => {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Add brighter texture variation to the ground
+  // Add brighter texture variation to the ground (more patches for bigger world)
   const grassPatches = [];
-  for (let i = 0; i < 20; i++) {
-    // More patches for better coverage
-    const patchGeometry = new THREE.CircleGeometry(Math.random() * 10 + 4, 16);
+  for (let i = 0; i < 50; i++) {
+    // More patches for better coverage in bigger world
+    const patchGeometry = new THREE.CircleGeometry(Math.random() * 15 + 8, 16);
     const patchMaterial = new THREE.MeshPhongMaterial({
       color: new THREE.Color().setHSL(0.25, 0.7, 0.35 + Math.random() * 0.25), // Brighter patches
       transparent: true,
@@ -158,9 +175,9 @@ window.addEventListener("load", () => {
     const patch = new THREE.Mesh(patchGeometry, patchMaterial);
     patch.rotation.x = -Math.PI / 2;
     patch.position.set(
-      (Math.random() - 0.5) * 180,
+      (Math.random() - 0.5) * 450,
       0.005,
-      (Math.random() - 0.5) * 180
+      (Math.random() - 0.5) * 450
     );
     patch.receiveShadow = true;
     scene.add(patch);
@@ -179,19 +196,48 @@ window.addEventListener("load", () => {
   );
   world.addBody(groundBody);
 
-  // === ROAD SYSTEM ===
-  // Create main road segments with better materials
+  // === EXPANDED ROAD SYSTEM ===
+  // Create a comprehensive road network with multiple highways and intersections
   const roadSegments = [
-    // Main straight road
-    { x: 0, z: 0, width: 8, length: 40, rotation: 0 },
-    // Cross road
-    { x: 0, z: 0, width: 8, length: 30, rotation: Math.PI / 2 },
-    // Curved sections (simulated with angled segments)
-    { x: 20, z: 15, width: 8, length: 20, rotation: Math.PI / 4 },
-    { x: -20, z: 15, width: 8, length: 20, rotation: -Math.PI / 4 },
-    // Additional straight segments
-    { x: 30, z: 25, width: 8, length: 25, rotation: 0 },
-    { x: -30, z: 25, width: 8, length: 25, rotation: 0 },
+    // Main highway (north-south)
+    { x: 0, z: 0, width: 12, length: 80, rotation: 0 },
+    { x: 0, z: 80, width: 12, length: 80, rotation: 0 },
+    { x: 0, z: -80, width: 12, length: 80, rotation: 0 },
+
+    // Cross highway (east-west)
+    { x: 0, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
+    { x: 80, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
+    { x: -80, z: 0, width: 12, length: 80, rotation: Math.PI / 2 },
+
+    // Secondary roads branching out
+    { x: 40, z: 40, width: 10, length: 60, rotation: 0 },
+    { x: -40, z: 40, width: 10, length: 60, rotation: 0 },
+    { x: 40, z: -40, width: 10, length: 60, rotation: 0 },
+    { x: -40, z: -40, width: 10, length: 60, rotation: 0 },
+
+    // Connecting diagonal roads
+    { x: 60, z: 60, width: 8, length: 50, rotation: Math.PI / 4 },
+    { x: -60, z: 60, width: 8, length: 50, rotation: -Math.PI / 4 },
+    { x: 60, z: -60, width: 8, length: 50, rotation: -Math.PI / 4 },
+    { x: -60, z: -60, width: 8, length: 50, rotation: Math.PI / 4 },
+
+    // Outer ring road segments
+    { x: 120, z: 0, width: 8, length: 40, rotation: 0 },
+    { x: -120, z: 0, width: 8, length: 40, rotation: 0 },
+    { x: 0, z: 120, width: 8, length: 40, rotation: Math.PI / 2 },
+    { x: 0, z: -120, width: 8, length: 40, rotation: Math.PI / 2 },
+
+    // Additional curved sections (simulated with angled segments)
+    { x: 100, z: 80, width: 8, length: 30, rotation: Math.PI / 6 },
+    { x: -100, z: 80, width: 8, length: 30, rotation: -Math.PI / 6 },
+    { x: 100, z: -80, width: 8, length: 30, rotation: -Math.PI / 6 },
+    { x: -100, z: -80, width: 8, length: 30, rotation: Math.PI / 6 },
+
+    // Long distance highways
+    { x: 0, z: 160, width: 10, length: 60, rotation: 0 },
+    { x: 0, z: -160, width: 10, length: 60, rotation: 0 },
+    { x: 160, z: 0, width: 10, length: 60, rotation: Math.PI / 2 },
+    { x: -160, z: 0, width: 10, length: 60, rotation: Math.PI / 2 },
   ];
 
   roadSegments.forEach((road) => {
@@ -414,17 +460,30 @@ window.addEventListener("load", () => {
   carBody.addShape(carShape);
   world.addBody(carBody);
 
-  // === OBSTACLE COURSE ===
-  // Create some obstacles to drive around
+  // === EXPANDED OBSTACLE COURSE ===
+  // Create obstacles distributed across the larger world
   const obstacles = [];
   const obstaclePhysicsBodies = [];
 
-  // Road barriers (concrete barriers along roads)
+  // Road barriers (concrete barriers along major roads) - more distributed
   const barriers = [
-    { x: 4.5, z: -15, width: 1, height: 1.2, depth: 8, color: 0xc0c0c0 }, // Right side barrier
-    { x: -4.5, z: -15, width: 1, height: 1.2, depth: 8, color: 0xc0c0c0 }, // Left side barrier
-    { x: 4.5, z: 15, width: 1, height: 1.2, depth: 8, color: 0xc0c0c0 }, // Right side barrier
-    { x: -4.5, z: 15, width: 1, height: 1.2, depth: 8, color: 0xc0c0c0 }, // Left side barrier
+    // Main highway barriers
+    { x: 6.5, z: -40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
+    { x: -6.5, z: -40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
+    { x: 6.5, z: 40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
+    { x: -6.5, z: 40, width: 1, height: 1.2, depth: 15, color: 0xc0c0c0 },
+
+    // Cross highway barriers
+    { x: 40, z: 6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
+    { x: 40, z: -6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
+    { x: -40, z: 6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
+    { x: -40, z: -6.5, width: 15, height: 1.2, depth: 1, color: 0xc0c0c0 },
+
+    // Outer area barriers
+    { x: 90, z: 90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
+    { x: -90, z: 90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
+    { x: 90, z: -90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
+    { x: -90, z: -90, width: 2, height: 1.5, depth: 20, color: 0xa0a0a0 },
   ];
 
   barriers.forEach((barrier) => {
@@ -455,14 +514,33 @@ window.addEventListener("load", () => {
     obstaclePhysicsBodies.push(body);
   });
 
-  // Traffic cones for slalom course
+  // Traffic cones for slalom course - distributed across multiple areas
   const cones = [
-    { x: -2, z: -25, color: 0xff4500 }, // Orange cone
-    { x: 2, z: -30, color: 0xff4500 },
-    { x: -2, z: -35, color: 0xff4500 },
-    { x: 2, z: -40, color: 0xff4500 },
-    { x: -2, z: -45, color: 0xff4500 },
-    { x: 2, z: -50, color: 0xff4500 },
+    // Main highway slalom
+    { x: -3, z: -60, color: 0xff4500 },
+    { x: 3, z: -70, color: 0xff4500 },
+    { x: -3, z: -80, color: 0xff4500 },
+    { x: 3, z: -90, color: 0xff4500 },
+
+    // Cross road slalom
+    { x: -60, z: -3, color: 0xff4500 },
+    { x: -70, z: 3, color: 0xff4500 },
+    { x: -80, z: -3, color: 0xff4500 },
+    { x: -90, z: 3, color: 0xff4500 },
+
+    // Secondary road cones
+    { x: 35, z: 60, color: 0xff4500 },
+    { x: 45, z: 65, color: 0xff4500 },
+    { x: 35, z: 70, color: 0xff4500 },
+    { x: 45, z: 75, color: 0xff4500 },
+
+    // Outer area challenge cones
+    { x: 120, z: 25, color: 0xff4500 },
+    { x: 115, z: 30, color: 0xff4500 },
+    { x: 120, z: 35, color: 0xff4500 },
+    { x: -120, z: -25, color: 0xff4500 },
+    { x: -115, z: -30, color: 0xff4500 },
+    { x: -120, z: -35, color: 0xff4500 },
   ];
 
   cones.forEach((cone) => {
@@ -486,14 +564,45 @@ window.addEventListener("load", () => {
     obstaclePhysicsBodies.push(coneBody);
   });
 
-  // Large obstacles (buildings/structures)
+  // Large obstacles (buildings/structures) - expanded city-like layout
   const buildings = [
-    { x: 15, z: -10, width: 3, height: 4, depth: 3, color: 0x8b4513 }, // Brown building
-    { x: -15, z: -10, width: 2.5, height: 3, depth: 2.5, color: 0x696969 }, // Gray building
-    { x: 25, z: 5, width: 4, height: 2, depth: 4, color: 0x654321 }, // Wide brown building
-    { x: -25, z: 5, width: 2, height: 5, depth: 2, color: 0x8b4513 }, // Tall building
-    { x: 12, z: 35, width: 3, height: 3, depth: 3, color: 0x708090 }, // Slate gray
-    { x: -12, z: 35, width: 2, height: 4, depth: 2, color: 0x2f4f4f }, // Dark slate
+    // Central city area
+    { x: 25, z: 25, width: 4, height: 6, depth: 4, color: 0x8b4513 },
+    { x: -25, z: 25, width: 3, height: 5, depth: 3, color: 0x696969 },
+    { x: 25, z: -25, width: 5, height: 4, depth: 5, color: 0x654321 },
+    { x: -25, z: -25, width: 3, height: 7, depth: 3, color: 0x8b4513 },
+
+    // Eastern district
+    { x: 70, z: 30, width: 6, height: 8, depth: 4, color: 0x708090 },
+    { x: 80, z: 50, width: 4, height: 6, depth: 6, color: 0x2f4f4f },
+    { x: 90, z: 20, width: 3, height: 5, depth: 3, color: 0x696969 },
+    { x: 75, z: 70, width: 5, height: 4, depth: 4, color: 0x8b4513 },
+
+    // Western district
+    { x: -70, z: 30, width: 4, height: 7, depth: 5, color: 0x654321 },
+    { x: -80, z: 50, width: 6, height: 5, depth: 3, color: 0x708090 },
+    { x: -90, z: 20, width: 3, height: 6, depth: 4, color: 0x2f4f4f },
+    { x: -75, z: 70, width: 4, height: 8, depth: 4, color: 0x696969 },
+
+    // Northern district
+    { x: 30, z: 80, width: 5, height: 6, depth: 5, color: 0x8b4513 },
+    { x: 50, z: 90, width: 3, height: 4, depth: 3, color: 0x708090 },
+    { x: 20, z: 100, width: 4, height: 7, depth: 4, color: 0x2f4f4f },
+    { x: -30, z: 80, width: 6, height: 5, depth: 4, color: 0x654321 },
+    { x: -50, z: 90, width: 3, height: 6, depth: 5, color: 0x696969 },
+
+    // Southern district
+    { x: 30, z: -80, width: 4, height: 5, depth: 4, color: 0x708090 },
+    { x: 50, z: -90, width: 5, height: 7, depth: 3, color: 0x8b4513 },
+    { x: 20, z: -100, width: 3, height: 4, depth: 6, color: 0x2f4f4f },
+    { x: -30, z: -80, width: 6, height: 6, depth: 4, color: 0x654321 },
+    { x: -50, z: -90, width: 4, height: 8, depth: 4, color: 0x696969 },
+
+    // Outer suburban areas
+    { x: 130, z: 60, width: 8, height: 3, depth: 6, color: 0x8b4513 },
+    { x: -130, z: 60, width: 6, height: 4, depth: 8, color: 0x696969 },
+    { x: 130, z: -60, width: 7, height: 5, depth: 5, color: 0x708090 },
+    { x: -130, z: -60, width: 5, height: 6, depth: 7, color: 0x654321 },
   ];
 
   buildings.forEach((building) => {
@@ -528,13 +637,39 @@ window.addEventListener("load", () => {
     obstaclePhysicsBodies.push(body);
   });
 
-  // Cylindrical obstacles (pillars/poles)
+  // Cylindrical obstacles (pillars/poles) - distributed across the expanded world
   const pillars = [
-    { x: -8, z: 25, radius: 0.5, height: 3, color: 0x2f4f4f }, // Dark slate gray
-    { x: 8, z: 25, radius: 0.5, height: 3, color: 0x2f4f4f },
-    { x: -20, z: -25, radius: 0.4, height: 4, color: 0x8b4513 }, // Brown pole
-    { x: 20, z: -25, radius: 0.4, height: 4, color: 0x8b4513 },
-    { x: 0, z: 50, radius: 0.6, height: 2.5, color: 0x556b2f }, // Dark olive green
+    // Central area pillars
+    { x: -15, z: 60, radius: 0.5, height: 3, color: 0x2f4f4f },
+    { x: 15, z: 60, radius: 0.5, height: 3, color: 0x2f4f4f },
+    { x: -15, z: -60, radius: 0.4, height: 4, color: 0x8b4513 },
+    { x: 15, z: -60, radius: 0.4, height: 4, color: 0x8b4513 },
+
+    // Eastern area pillars
+    { x: 65, z: 0, radius: 0.6, height: 3.5, color: 0x556b2f },
+    { x: 85, z: 25, radius: 0.5, height: 4, color: 0x2f4f4f },
+    { x: 105, z: -15, radius: 0.4, height: 2.5, color: 0x8b4513 },
+    { x: 125, z: 35, radius: 0.7, height: 3, color: 0x556b2f },
+
+    // Western area pillars
+    { x: -65, z: 0, radius: 0.6, height: 3.5, color: 0x556b2f },
+    { x: -85, z: 25, radius: 0.5, height: 4, color: 0x2f4f4f },
+    { x: -105, z: -15, radius: 0.4, height: 2.5, color: 0x8b4513 },
+    { x: -125, z: 35, radius: 0.7, height: 3, color: 0x556b2f },
+
+    // Northern area pillars
+    { x: 0, z: 110, radius: 0.8, height: 4, color: 0x2f4f4f },
+    { x: 25, z: 125, radius: 0.5, height: 3.5, color: 0x8b4513 },
+    { x: -25, z: 125, radius: 0.5, height: 3.5, color: 0x8b4513 },
+    { x: 50, z: 140, radius: 0.6, height: 3, color: 0x556b2f },
+    { x: -50, z: 140, radius: 0.6, height: 3, color: 0x556b2f },
+
+    // Southern area pillars
+    { x: 0, z: -110, radius: 0.8, height: 4, color: 0x2f4f4f },
+    { x: 25, z: -125, radius: 0.5, height: 3.5, color: 0x8b4513 },
+    { x: -25, z: -125, radius: 0.5, height: 3.5, color: 0x8b4513 },
+    { x: 50, z: -140, radius: 0.6, height: 3, color: 0x556b2f },
+    { x: -50, z: -140, radius: 0.6, height: 3, color: 0x556b2f },
   ];
 
   pillars.forEach((pillar) => {
@@ -569,10 +704,57 @@ window.addEventListener("load", () => {
     obstaclePhysicsBodies.push(body);
   });
 
-  // Ramps for jumping (optional fun elements)
+  // Ramps for jumping (optional fun elements) - distributed across the world
   const ramps = [
-    { x: 35, z: -5, width: 6, height: 0.5, depth: 3, rotation: Math.PI / 12 }, // Small ramp
-    { x: -35, z: -5, width: 6, height: 0.5, depth: 3, rotation: -Math.PI / 12 }, // Small ramp
+    // Central area ramps
+    { x: 70, z: -10, width: 8, height: 0.8, depth: 4, rotation: Math.PI / 12 },
+    {
+      x: -70,
+      z: -10,
+      width: 8,
+      height: 0.8,
+      depth: 4,
+      rotation: -Math.PI / 12,
+    },
+
+    // Northern ramps
+    { x: 40, z: 110, width: 6, height: 0.6, depth: 3, rotation: Math.PI / 15 },
+    {
+      x: -40,
+      z: 110,
+      width: 6,
+      height: 0.6,
+      depth: 3,
+      rotation: -Math.PI / 15,
+    },
+
+    // Southern ramps
+    { x: 40, z: -110, width: 6, height: 0.6, depth: 3, rotation: Math.PI / 15 },
+    {
+      x: -40,
+      z: -110,
+      width: 6,
+      height: 0.6,
+      depth: 3,
+      rotation: -Math.PI / 15,
+    },
+
+    // Eastern and Western challenge ramps
+    { x: 140, z: 20, width: 10, height: 1.0, depth: 5, rotation: Math.PI / 10 },
+    {
+      x: -140,
+      z: 20,
+      width: 10,
+      height: 1.0,
+      depth: 5,
+      rotation: -Math.PI / 10,
+    },
+
+    // Diagonal ramps for advanced driving
+    { x: 90, z: 80, width: 7, height: 0.7, depth: 4, rotation: Math.PI / 8 },
+    { x: -90, z: 80, width: 7, height: 0.7, depth: 4, rotation: -Math.PI / 8 },
+    { x: 90, z: -80, width: 7, height: 0.7, depth: 4, rotation: Math.PI / 8 },
+    { x: -90, z: -80, width: 7, height: 0.7, depth: 4, rotation: -Math.PI / 8 },
   ];
 
   ramps.forEach((ramp) => {
@@ -666,12 +848,12 @@ window.addEventListener("load", () => {
 
     // FORWARD - W key or Up arrow
     if (keys["KeyW"] || keys["ArrowUp"]) {
-      moveSpeed = 15; // Faster forward speed
+      moveSpeed = 20; // Even faster for the bigger world
     }
 
     // BACKWARD - S key or Down arrow
     if (keys["KeyS"] || keys["ArrowDown"]) {
-      moveSpeed = -8; // Faster reverse speed
+      moveSpeed = -12; // Faster reverse for bigger distances
     }
 
     // LEFT TURN - A key or Left arrow
@@ -775,8 +957,8 @@ window.addEventListener("load", () => {
     car.position.copy(carBody.position);
     car.quaternion.copy(carBody.quaternion);
 
-    // Make camera follow the car with mouse-controlled rotation
-    const cameraDistance = 8; // Distance from car
+    // Make camera follow the car with mouse-controlled rotation (adjusted for bigger world)
+    const cameraDistance = 12; // Increased distance for better view of the larger world
 
     // Calculate camera position using spherical coordinates
     const cameraX =
