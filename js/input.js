@@ -8,8 +8,8 @@ export class InputManager {
     this.isMouseDown = false;
     this.mouseX = 0;
     this.mouseY = 0;
-    this.cameraAngleX = 0;
-    this.cameraAngleY = 5;
+    this.cameraAngleX = -0.5;
+    this.cameraAngleY = 0.8;
   }
 
   setupKeyboardControls() {

@@ -43,8 +43,7 @@ export class SceneManager {
 
     document.body.appendChild(this.renderer.domElement);
 
-    // Set initial camera position - higher and further back to avoid being under the car
-    this.camera.position.set(0, 8, 15);
+    this.camera.position.set(0, 12, 25);
     this.camera.lookAt(0, 0, 0);
   }
 
