@@ -1,4 +1,3 @@
-// Car Module
 export class Car {
   constructor(scene, physicsSystem) {
     this.scene = scene;
@@ -12,10 +11,9 @@ export class Car {
   }
 
   createVisualModel() {
-    // Car body (main rectangle) - sleeker design
     const bodyGeometry = new THREE.BoxGeometry(1.8, 0.5, 4.2);
     const bodyMaterial = new THREE.MeshPhongMaterial({
-      color: 0xdc143c, // Crimson red
+      color: 0xdc143c,
       shininess: 100,
       specular: 0x222222,
     });
@@ -25,21 +23,19 @@ export class Car {
     carBodyMesh.receiveShadow = true;
     this.group.add(carBodyMesh);
 
-    // Car hood (front section)
-    const hoodGeometry = new THREE.BoxGeometry(1.6, 0.3, 1.2);
+    const hoodGeometry = new THREE.BoxGeometry(1.6, 0.2, 1.2);
     const hoodMaterial = new THREE.MeshPhongMaterial({
-      color: 0xb71c1c, // Darker red
+      color: 0xb71c1c,
       shininess: 120,
     });
     const carHood = new THREE.Mesh(hoodGeometry, hoodMaterial);
-    carHood.position.set(0, 0.15, 1.8);
+    carHood.position.set(0, 0.2, 1.4);
     carHood.castShadow = true;
     this.group.add(carHood);
 
-    // Car roof/cabin
     const roofGeometry = new THREE.BoxGeometry(1.4, 0.6, 2.2);
     const roofMaterial = new THREE.MeshPhongMaterial({
-      color: 0x1a1a1a, // Very dark gray
+      color: 0x1a1a1a,
       shininess: 80,
     });
     const carRoof = new THREE.Mesh(roofGeometry, roofMaterial);
@@ -51,13 +47,11 @@ export class Car {
     this.addLights();
     this.createWheels();
 
-    // Position the entire car above ground so it falls down
     this.group.position.y = 2;
     this.scene.add(this.group);
   }
 
   addWindows() {
-    // Windshield (front glass)
     const windshieldGeometry = new THREE.PlaneGeometry(1.3, 0.5);
     const windshieldMaterial = new THREE.MeshPhongMaterial({
       color: 0x87ceeb,
@@ -70,7 +64,6 @@ export class Car {
     windshield.rotation.x = -0.2;
     this.group.add(windshield);
 
-    // Side windows
     const sideWindowGeometry = new THREE.PlaneGeometry(1.8, 0.4);
     const sideWindowMaterial = new THREE.MeshPhongMaterial({
       color: 0x87ceeb,
@@ -91,7 +84,6 @@ export class Car {
   }
 
   addLights() {
-    // Headlights
     const headlightGeometry = new THREE.SphereGeometry(0.15, 8, 8);
     const headlightMaterial = new THREE.MeshPhongMaterial({
       color: 0xfffff0,
@@ -107,7 +99,6 @@ export class Car {
     rightHeadlight.position.set(0.6, 0.1, 2.0);
     this.group.add(rightHeadlight);
 
-    // Taillights
     const taillightGeometry = new THREE.SphereGeometry(0.1, 8, 8);
     const taillightMaterial = new THREE.MeshPhongMaterial({
       color: 0xff0000,
@@ -139,14 +130,13 @@ export class Car {
     });
 
     const wheelPositions = [
-      [-0.9, 1.3], // Front left
-      [0.9, 1.3], // Front right
-      [-0.9, -1.3], // Rear left
-      [0.9, -1.3], // Rear right
+      [-0.9, 1.3],
+      [0.9, 1.3],
+      [-0.9, -1.3],
+      [0.9, -1.3],
     ];
 
     wheelPositions.forEach((pos) => {
-      // Main wheel (tire)
       const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
       wheel.position.set(pos[0], -0.25, pos[1]);
       wheel.rotation.z = Math.PI / 2;
@@ -155,7 +145,6 @@ export class Car {
       this.group.add(wheel);
       this.wheels.push(wheel);
 
-      // Wheel rim (decorative)
       const rim = new THREE.Mesh(rimGeometry, rimMaterial);
       rim.position.set(pos[0], -0.25, pos[1]);
       rim.rotation.z = Math.PI / 2;
@@ -169,7 +158,6 @@ export class Car {
   }
 
   update() {
-    // Sync Three.js car with Cannon.js physics body
     this.group.position.copy(this.physicsBody.position);
     this.group.quaternion.copy(this.physicsBody.quaternion);
   }
@@ -178,18 +166,15 @@ export class Car {
     if (moveSpeed !== 0) {
       const wheelRotationSpeed = moveSpeed * deltaTime * 0.8;
       this.wheels.forEach((wheel, index) => {
-        // Front wheels (index 0 and 1) also turn with steering
         if (index < 2 && turnSpeed !== 0) {
           wheel.rotation.y = turnSpeed * 0.02;
         } else if (index >= 2) {
           wheel.rotation.y = 0;
         }
 
-        // All wheels rotate when moving
         wheel.rotation.x += wheelRotationSpeed;
       });
     } else {
-      // Reset front wheel steering when not turning
       this.wheels[0].rotation.y = 0;
       this.wheels[1].rotation.y = 0;
     }

@@ -43,17 +43,36 @@ class GameManager {
     console.log("✅ Cannon.js loaded, setting up physics...");
 
     try {
-      // Initialize systems in order
+      // Update loading message
+      document.getElementById("loading").innerHTML = "Initializing physics...";
+
+      // Initialize systems in order with progress updates
       this.physics = new PhysicsSystem();
+      console.log("✅ Physics system created");
+
+      document.getElementById("loading").innerHTML = "Creating scene...";
       this.scene = new SceneManager();
+      console.log("✅ Scene manager created");
+
+      document.getElementById("loading").innerHTML =
+        "Building world environment...";
+      // Add a small delay to let the page breathe
+      await new Promise((resolve) => setTimeout(resolve, 100));
       this.world = new WorldBuilder(this.scene, this.physics);
+      console.log("✅ World builder created");
+
+      document.getElementById("loading").innerHTML = "Creating car...";
+      await new Promise((resolve) => setTimeout(resolve, 50));
       this.car = new Car(this.scene, this.physics);
+      console.log("✅ Car created");
       this.input = new InputManager(this.car);
       this.cameraController = new CameraController(this.scene.camera, this.car);
 
+      document.getElementById("loading").innerHTML = "Setting up UI...";
       // Setup UI
       this.setupUI();
 
+      console.log("✅ All systems initialized");
       this.isInitialized = true;
       this.startGameLoop();
 
@@ -65,8 +84,10 @@ class GameManager {
       console.log("🚧 Car will collide with obstacles - drive carefully!");
     } catch (error) {
       console.error("❌ Error initializing game:", error);
-      document.getElementById("loading").innerHTML =
-        "Error: Failed to initialize game";
+      console.error("❌ Stack trace:", error.stack);
+      document.getElementById(
+        "loading"
+      ).innerHTML = `Error: Failed to initialize game<br><small>${error.message}</small>`;
     }
   }
 
@@ -75,6 +96,9 @@ class GameManager {
     if (!document.getElementById("camera-selector")) {
       this.createCameraUI();
     }
+
+    // Initialize speedometer
+    this.initializeSpeedometer();
   }
 
   createCameraUI() {
@@ -92,7 +116,7 @@ class GameManager {
     cameraSelector.style.cssText = `
       position: absolute;
       bottom: 20px;
-      left: 200px;
+      left: 1150px;
       color: white;
       font-size: 14px;
       z-index: 100;
@@ -153,6 +177,17 @@ class GameManager {
       .getElementById("camera-3")
       .addEventListener("click", () => this.switchCameraButton(3));
 
+    // Add keyboard event listeners for 1, 2, 3 keys
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Digit1") {
+        this.switchCameraButton(1);
+      } else if (event.code === "Digit2") {
+        this.switchCameraButton(2);
+      } else if (event.code === "Digit3") {
+        this.switchCameraButton(3);
+      }
+    });
+
     // Update controls text
     const controlsElement = document.getElementById("controls");
     if (controlsElement) {
@@ -162,6 +197,16 @@ class GameManager {
         Mouse - Look Around (Follow cam)<br />
         1, 2, 3 - Camera Modes
       `;
+    }
+  }
+
+  initializeSpeedometer() {
+    const speedElement = document.getElementById("speed");
+    if (speedElement) {
+      speedElement.innerText = "0";
+      console.log("✅ Speedometer initialized");
+    } else {
+      console.warn("⚠️ Speed element not found in DOM");
     }
   }
 
@@ -207,18 +252,45 @@ class GameManager {
     // Update camera
     this.cameraController.update(this.input);
 
+    // Update grass animation
+    this.world.updateGrassAnimation(deltaTime);
+
     // Update speedometer
-    this.updateSpeedometer();
+    if (this.car) {
+      this.updateSpeedometer();
+    }
 
     // Render the scene
     this.scene.render();
   }
 
   updateSpeedometer() {
-    const speed = this.car.getPhysicsBody().velocity.length();
-    const speedElement = document.getElementById("speed");
-    if (speedElement) {
-      speedElement.innerText = (speed * 3.6).toFixed(0); // Convert m/s to km/h
+    try {
+      const physicsBody = this.car.getPhysicsBody();
+      if (!physicsBody || !physicsBody.velocity) {
+        // Set speedometer to 0 if no physics body
+        const speedElement = document.getElementById("speed");
+        if (speedElement) {
+          speedElement.innerText = "0";
+        }
+        return;
+      }
+
+      const speed = physicsBody.velocity.length();
+      const speedElement = document.getElementById("speed");
+      if (speedElement) {
+        const speedKmh = Math.round(speed * 3.6); // Convert m/s to km/h
+        speedElement.innerText = speedKmh.toString();
+      } else {
+        console.warn("Speed element not found in DOM");
+      }
+    } catch (error) {
+      console.error("Error updating speedometer:", error);
+      // Fallback to 0 speed
+      const speedElement = document.getElementById("speed");
+      if (speedElement) {
+        speedElement.innerText = "0";
+      }
     }
   }
 

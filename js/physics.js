@@ -79,4 +79,45 @@ export class PhysicsSystem {
   addBody(body) {
     this.world.addBody(body);
   }
+
+  createObstacleBody(position, size, rotation = null) {
+    // Create a static obstacle body
+    const obstacleShape = new CANNON.Box(
+      new CANNON.Vec3(size.width / 2, size.height / 2, size.depth / 2)
+    );
+    const obstacleBody = new CANNON.Body({
+      mass: 0, // Static body
+      position: new CANNON.Vec3(position.x, position.y, position.z),
+      material: this.materials.obstacle,
+    });
+    obstacleBody.addShape(obstacleShape);
+
+    // Apply rotation if provided
+    if (rotation) {
+      if (rotation.x) {
+        const qx = new CANNON.Quaternion().setFromAxisAngle(
+          new CANNON.Vec3(1, 0, 0),
+          rotation.x
+        );
+        obstacleBody.quaternion = obstacleBody.quaternion.mult(qx);
+      }
+      if (rotation.y) {
+        const qy = new CANNON.Quaternion().setFromAxisAngle(
+          new CANNON.Vec3(0, 1, 0),
+          rotation.y
+        );
+        obstacleBody.quaternion = obstacleBody.quaternion.mult(qy);
+      }
+      if (rotation.z) {
+        const qz = new CANNON.Quaternion().setFromAxisAngle(
+          new CANNON.Vec3(0, 0, 1),
+          rotation.z
+        );
+        obstacleBody.quaternion = obstacleBody.quaternion.mult(qz);
+      }
+    }
+
+    this.world.addBody(obstacleBody);
+    return obstacleBody;
+  }
 }
