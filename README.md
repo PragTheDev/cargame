@@ -1,3 +1,5 @@
+![Example Image](cargame.png)
+
 # 🚗 The Car Game - Drive Around
 
 A simple and fun Three.js car game where you can drive around an open world environment, similar to Bruno Simon's portfolio style. Just drive around and explore!
